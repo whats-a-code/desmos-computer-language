@@ -1,8 +1,6 @@
-﻿
-
-class Compiler
+﻿class Program
 {   
-    public static int Main(string[] input)
+    public static int ParseProgram(string[] input)
     {
         if (input.Length == 0) {Console.WriteLine("No input provided."); return 1; }
         if (input.Length > 1) {Console.WriteLine("Too many inputs provided."); return 1; }
@@ -17,13 +15,20 @@ class Compiler
         string code = File.ReadAllText(path);
         if (String.IsNullOrWhiteSpace(code))
         {
-            Console.WriteLine($"File is empty or has only whitespace: {path}");
+            Console.WriteLine($"File is empty: {path}");
             return 3;
         }
 
         foreach (string line in code.Split("\r\n", StringSplitOptions.RemoveEmptyEntries))
         {
-            string[] seperatedLine = line.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            string[] seperatedLine = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            switch (seperatedLine[0])
+            {
+                case "out":
+                    if (int.Parse(seperatedLine[2]) > 0) Console.WriteLine(seperatedLine[1]);
+                    break;
+            }
         }
 
         return 0;
