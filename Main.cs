@@ -1,24 +1,29 @@
-﻿class Compiler
+﻿using System.Reflection.Emit;
+
+class Compiler
 {
-   public static int Main(string[] input)
+    static void Main(string[] args)
     {
-        if (input.Length == 0) { Console.WriteLine("No input provided."); return 1; }
-        if (input.Length > 1) { Console.WriteLine("Too many inputs provided."); return 1; }
+        string assemblyName;
+        string outputPath;
+        string inputFile;
 
-        string path = Path.GetFullPath(input[0]);
-        if (!File.Exists(path))
+        foreach (string arg in args)
         {
-            Console.WriteLine($"File not found: {path}");
-            return 2;
-        }
+            switch (arg)
+            {
+                case "--name":
+                    assemblyName = args[Array.IndexOf(args, arg) + 1];
+                    break;
 
-        string code = File.ReadAllText(path);
-        if (String.IsNullOrWhiteSpace(code))
-        {
-            Console.WriteLine($"File is empty or has only whitespace: {path}");
-            return 3;
-        }
+                case "--path":
+                    outputPath = args[Array.IndexOf(args, arg) + 1];
+                    break;
 
-        return 0;
+                case "--input":
+                    inputFile = args[Array.IndexOf(args, arg) + 1];
+                    break;
+            }
+        }   
     }
 }
